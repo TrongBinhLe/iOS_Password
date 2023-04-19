@@ -14,6 +14,7 @@ class PasswordTextField: UIView {
     let textField = UITextField()
     let placeHolderText: String
     let eyeButton = UIButton(type: .custom)
+    let dividerView = UIView()
     
     init(placeHolderText: String) {
         self.placeHolderText = placeHolderText
@@ -28,7 +29,7 @@ class PasswordTextField: UIView {
     }
     
     override var intrinsicContentSize: CGSize {
-        return CGSize(width: 200, height: 200)
+        return CGSize(width: 200, height: 50)
     }
     
 }
@@ -39,6 +40,8 @@ extension PasswordTextField {
     private func style() {
         translatesAutoresizingMaskIntoConstraints = false
         backgroundColor = .systemOrange
+        
+        lockImageView.translatesAutoresizingMaskIntoConstraints = false
         
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.isSecureTextEntry = false
@@ -51,12 +54,17 @@ extension PasswordTextField {
         eyeButton.setImage(UIImage(systemName: "eye.circle"), for: .normal)
         eyeButton.setImage(UIImage(systemName: "eye.slash.circle"), for: .selected)
         eyeButton.addTarget(self, action: #selector(togglePasswordView), for: .touchUpInside)
+        
+        dividerView.translatesAutoresizingMaskIntoConstraints = false
+        dividerView.backgroundColor = .separator
+        
     }
     
     private func layout() {
         addSubview(lockImageView)
         addSubview(textField)
         addSubview(eyeButton)
+        addSubview(dividerView)
         
         //lock
         NSLayoutConstraint.activate([
@@ -76,6 +84,21 @@ extension PasswordTextField {
             eyeButton.leadingAnchor.constraint(equalToSystemSpacingAfter: textField.trailingAnchor, multiplier: 1),
             eyeButton.trailingAnchor.constraint(equalTo: trailingAnchor)
         ])
+        
+        //divider
+        
+        NSLayoutConstraint.activate([
+            dividerView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            dividerView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            dividerView.heightAnchor.constraint(equalToConstant: 1),
+            dividerView.topAnchor.constraint(equalToSystemSpacingBelow: textField.bottomAnchor, multiplier: 1)
+        ])
+        
+        //CHCR
+        
+        lockImageView.setContentHuggingPriority(UILayoutPriority.defaultHigh, for: .horizontal)
+        textField.setContentHuggingPriority(UILayoutPriority.defaultLow, for: .horizontal)
+        eyeButton.setContentHuggingPriority(UILayoutPriority.defaultHigh, for: .horizontal)
     }
 }
 
