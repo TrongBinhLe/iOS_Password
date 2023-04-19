@@ -15,6 +15,7 @@ class PasswordTextField: UIView {
     let placeHolderText: String
     let eyeButton = UIButton(type: .custom)
     let dividerView = UIView()
+    let errorLabel = UILabel()
     
     init(placeHolderText: String) {
         self.placeHolderText = placeHolderText
@@ -29,7 +30,7 @@ class PasswordTextField: UIView {
     }
     
     override var intrinsicContentSize: CGSize {
-        return CGSize(width: 200, height: 50)
+        return CGSize(width: UIView.noIntrinsicMetric, height: 80)
     }
     
 }
@@ -58,6 +59,16 @@ extension PasswordTextField {
         dividerView.translatesAutoresizingMaskIntoConstraints = false
         dividerView.backgroundColor = .separator
         
+        // Error label
+        errorLabel.translatesAutoresizingMaskIntoConstraints = false
+        errorLabel.textColor = .systemRed
+        errorLabel.font = .preferredFont(forTextStyle: .footnote)
+        errorLabel.text = "Enter your password and again and again and again and again and again"
+//        errorLabel.adjustsFontSizeToFitWidth = true
+//        errorLabel.minimumScaleFactor = 80
+        errorLabel.numberOfLines = 0
+        errorLabel.lineBreakMode  = .byWordWrapping
+        
     }
     
     private func layout() {
@@ -65,6 +76,7 @@ extension PasswordTextField {
         addSubview(textField)
         addSubview(eyeButton)
         addSubview(dividerView)
+        addSubview(errorLabel)
         
         //lock
         NSLayoutConstraint.activate([
@@ -86,7 +98,6 @@ extension PasswordTextField {
         ])
         
         //divider
-        
         NSLayoutConstraint.activate([
             dividerView.leadingAnchor.constraint(equalTo: leadingAnchor),
             dividerView.trailingAnchor.constraint(equalTo: trailingAnchor),
@@ -94,8 +105,14 @@ extension PasswordTextField {
             dividerView.topAnchor.constraint(equalToSystemSpacingBelow: textField.bottomAnchor, multiplier: 1)
         ])
         
-        //CHCR
+        //errorLabel
+        NSLayoutConstraint.activate([
+            errorLabel.topAnchor.constraint(equalTo: dividerView.bottomAnchor, constant: 4),
+            errorLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
+            errorLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
+        ])
         
+        //CHCR
         lockImageView.setContentHuggingPriority(UILayoutPriority.defaultHigh, for: .horizontal)
         textField.setContentHuggingPriority(UILayoutPriority.defaultLow, for: .horizontal)
         eyeButton.setContentHuggingPriority(UILayoutPriority.defaultHigh, for: .horizontal)
