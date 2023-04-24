@@ -37,9 +37,8 @@ class PasswordCriteriaView: UIView {
     }
     
     init(text: String) {
-        super.init(frame: .zero)
-        
         label.text = text
+        super.init(frame: .zero)
         
         setup()
         layout()
@@ -63,7 +62,7 @@ extension PasswordCriteriaView {
         stackView.axis = .horizontal
         stackView.spacing = 8
         
-        backgroundColor = .systemRed
+//        backgroundColor = .systemRed
         
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.image = UIImage(systemName: "circle")?.withTintColor(.tertiaryLabel, renderingMode: .alwaysOriginal)
@@ -71,7 +70,7 @@ extension PasswordCriteriaView {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .preferredFont(forTextStyle: .subheadline)
         label.textColor = .secondaryLabel
-        label.text = "uppercase letter (A-Z)"
+//        label.text = "uppercase letter (A-Z)"
     }
     
     private func layout() {
