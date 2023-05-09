@@ -30,6 +30,7 @@ extension ViewController {
     
     private func setup() {
         setupNewPassword()
+        setupConfirmPassword()
         setupDismissKeyboardGesture()
     }
     
@@ -98,6 +99,22 @@ extension ViewController {
         newPasswordTextField.customValidation = newPasswordValidation
     }
     
+    private func setupConfirmPassword() {
+        let confirmPasswordValidation: Customvalidation = { text in
+            guard let text = text, !text.isEmpty else {
+                return (false, "Enter your password.")
+            }
+            
+            guard text == self.newPasswordTextField.text else {
+                return (false, "Password not match")
+            }
+            
+            return (true, "")
+        }
+        confirmPasswordTextField.customValidation = confirmPasswordValidation
+        confirmPasswordTextField.delegate = self
+    }
+    
 }
 
 extension ViewController: PasswordTextFieldDelegate {
@@ -111,6 +128,8 @@ extension ViewController: PasswordTextFieldDelegate {
         if sender === newPasswordTextField {
             statusView.shouldResetCriteria = false
             _ = newPasswordTextField.validate()
+        } else if sender == confirmPasswordTextField {
+            _ = confirmPasswordTextField.validate()
         }
     }
     
