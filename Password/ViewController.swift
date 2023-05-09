@@ -8,6 +8,8 @@
 import UIKit
 
 class ViewController: UIViewController {
+    typealias Customvalidation = PasswordTextField.CustomValidation
+    
     let stackView = UIStackView()
     let newPasswordTextField = PasswordTextField(placeHolderText: "New password")
     let statusView = PasswordStatusView()
@@ -17,7 +19,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        
+        setup()
         style()
         layout()
     }
@@ -26,8 +28,15 @@ class ViewController: UIViewController {
 
 extension ViewController {
     
+    private func setup() {
+        setupNewPassword()
+        setupDismissKeyboardGesture()
+    }
+    
     private func style() {
         newPasswordTextField.translatesAutoresizingMaskIntoConstraints = false
+        newPasswordTextField.delegate = self
+        
         statusView.translatesAutoresizingMaskIntoConstraints = false
         resetButton.translatesAutoresizingMaskIntoConstraints = false
         
@@ -51,6 +60,43 @@ extension ViewController {
             stackView.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 2),
             view.trailingAnchor.constraint(equalTo: stackView.trailingAnchor, constant: 16),
         ])
+    }
+    
+    private func setupDismissKeyboardGesture() {
+        let dimissKeyboardTap = UITapGestureRecognizer(target: self, action: #selector(viewTapped(_: )))
+        view.addGestureRecognizer(dimissKeyboardTap)
+    }
+    
+    @objc func viewTapped(_ recognizer: UITapGestureRecognizer){
+        view.endEditing(true)
+    }
+    
+    private func setupNewPassword() {
+        let newPasswordValidation: Customvalidation = { text in
+            //Empty text
+            guard let text = text, !text.isEmpty else {
+                self.statusView.reset()
+            return (false, "Enter your password")
+            }
+            return (true,"")
+        }
+        
+        newPasswordTextField.customValidation = newPasswordValidation
+    }
+    
+}
+
+extension ViewController: PasswordTextFieldDelegate {
+    func editingChanged(_ sender: PasswordTextField) {
+        if sender === newPasswordTextField {
+            statusView.updateDisplay(sender.textField.text ?? "")
+        }
+    }
+    
+    func editingDidEnd(_ sender: PasswordTextField) {
+        if sender === newPasswordTextField {
+            _ = newPasswordTextField.validate()
+        }
     }
     
 }

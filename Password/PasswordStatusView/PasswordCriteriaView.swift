@@ -24,10 +24,6 @@ class PasswordCriteriaView: UIView {
             } else {
                 imageView.image = xmarkImage
             }
-            print("isCriteriamet change from \(oldValue) to \(isCriteriaMet)")
-        }
-        willSet {
-            print("isCriteriaMet will change from \(isCriteriaMet) to \(newValue)")
         }
     }
     
