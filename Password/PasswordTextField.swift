@@ -11,6 +11,8 @@ import UIKit
 protocol PasswordTextFieldDelegate: AnyObject {
     func editingChanged(_ sender: PasswordTextField)
     func editingDidEnd(_ sender: PasswordTextField)
+    func textFieldEmpty(_ sender: PasswordTextField)
+
 }
 
 class PasswordTextField: UIView {
@@ -178,5 +180,11 @@ extension PasswordTextField: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.endEditing(true)
         return true
+    }
+    
+    func textFieldDidChangeSelection(_ textField: UITextField) {
+        if textField.text == "" {
+            delegate?.textFieldEmpty(self)
+        }
     }
 }

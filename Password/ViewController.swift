@@ -74,7 +74,8 @@ extension ViewController {
     private func setupNewPassword() {
         let newPasswordValidation: Customvalidation = { text in
             //Empty text
-            guard let text = text, !text.isEmpty else {
+            guard let text = text, !text.isEmpty
+            else {
                 self.statusView.reset()
             return (false, "Enter your password")
             }
@@ -83,10 +84,14 @@ extension ViewController {
             let invalidSet = CharacterSet(charactersIn: validChars).inverted
             guard text.rangeOfCharacter(from: invalidSet) == nil else {
                 self.statusView.reset()
-                return(false, "Enter valid special chars (.,@:?!()$\\/#) with no spaces")
+                return (false, "Enter valid special chars (.,@:?!()$\\/#) with no spaces")
             }
       
             // Criteria met
+            self.statusView.updateDisplay(text)
+            if !self.statusView.validate(text) {
+                return (false, "Your password must meet the requirements below")
+            }
             return (true,"")
         }
         
@@ -104,7 +109,14 @@ extension ViewController: PasswordTextFieldDelegate {
     
     func editingDidEnd(_ sender: PasswordTextField) {
         if sender === newPasswordTextField {
+            statusView.shouldResetCriteria = false
             _ = newPasswordTextField.validate()
+        }
+    }
+    
+    func textFieldEmpty(_ sender: PasswordTextField) {
+        if sender === newPasswordTextField {
+            statusView.reset()
         }
     }
     
