@@ -48,6 +48,7 @@ extension ViewController {
         
         resetButton.configuration = .filled()
         resetButton.setTitle("Reset password", for: [])
+        resetButton.addTarget(self, action: #selector(resetPasswordButtonTapped), for: .primaryActionTriggered)
     }
     
     private func layout() {
@@ -178,5 +179,28 @@ extension ViewController {
     
     @objc func keyboardWillHide(sender: NSNotification) {
         view.frame.origin.y = 0
+    }
+}
+
+//MARK: -Actions
+
+extension ViewController {
+    @objc func resetPasswordButtonTapped() {
+        view.endEditing(true)
+        let isValidNewPassword = newPasswordTextField.validate()
+        let isValidConfirmPassword = confirmPasswordTextField.validate()
+        
+        if isValidNewPassword && isValidConfirmPassword {
+            showAlert(title: "Success", message: "You have successfully changed your password.")
+        }
+    }
+    
+    private func showAlert(title: String, message: String) {
+        let alert = UIAlertController(title: "", message: "", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        
+        alert.title = title
+        alert.message = message
+        present(alert, animated: true, completion: nil)
     }
 }
